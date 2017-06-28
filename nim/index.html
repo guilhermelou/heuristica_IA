@@ -1,0 +1,67 @@
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/styles.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	</head>
+
+	<body class="main-body">
+
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">9 SQUARE GAME</a>
+				</div>
+			</div>
+		</nav>
+
+		<h2 id="moviments">Moves: 0</h2>
+
+		<div id="mainContainer">
+			<div class="canvasContainer">
+				<canvas class="mainCanvas" id="mainCanvas" 	width="100" height="100" style="display: none;"></canvas>
+			</div>
+		</div>
+
+		<div class="well" id="options">
+			<div class="form-group">
+				<label for="sort_amount">
+					<h4>Set amount of moves to shuffle:</h4>
+				</label>
+				<div class="sort-wrapper">
+					<input id="sort-amount" class="form-control" type="number" value="50" min="1" name="sort-amount"/>
+				</div>
+				<button class="btn btn-success btn-lg" id="sort-button">
+					<li class="fa fa-random" aria-hidden="true"></li>
+					&nbsp; SHUFFLE
+				</button>
+			</div>
+
+			<hr>
+
+			<div class="btn-group form-group button-wrapper">
+			  <button id="heuristic-1-button" type="button" class="btn btn-primary btn-lg">Heuristic 1</button>
+			  <button id="heuristic-2-button" type="button" class="btn btn-primary btn-lg">Heuristic 2</button>
+				<button id="heuristic-custom-button" type="button" class="btn btn-primary btn-lg">Heuristic Custom</button>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-number-input.js"></script>
+
+		<script type="text/javascript" src="js/node.js"></script>
+		<script type="text/javascript" src="js/algorithm.js"></script>
+		<script type="text/javascript" src="js/region.js"></script>
+		<script type="text/javascript" src="js/canvas.js"></script>
+		<script type="text/javascript">
+			$('#sort-amount').bootstrapNumber();
+		</script>
+
+	</body>
+</html>
