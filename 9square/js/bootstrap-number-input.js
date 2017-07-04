@@ -2,7 +2,6 @@
  * bootstrap-spin - v1.0
  * https://github.com/wpic/bootstrap-spin
  * ========================================================================
- * Copyright 2014 WPIC, Hamed Abdollahpour
  *
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
