@@ -211,7 +211,6 @@ function handleButtons()
 	});
 	$("#random-button").click(function()
 	{
-        // É PRA EU FAZER
 		randomSolution($('#sort-amount').val());
 	});
 	$("#heuristic-1-button").click(function()
