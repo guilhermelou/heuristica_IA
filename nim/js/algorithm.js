@@ -61,21 +61,6 @@ function createChildNodes(parentNode)
 	{
 		auxMatrix[k] = new Array(3);
 	}
-	// var str;
-	// str ="PAI \n";
-	// for(var ii = 0; ii < 3; ii++)
-	// {
-	// 	for(var ji = 0; ji < 3; ji++)
-	// 	{
-	// 		if(parentNode.getBlocks()[ii][ji] == "")
-	// 		{
-	// 			str +=" |";
-	// 		}
-	// 		else
-	// 		str += parentNode.getBlocks()[ii][ji] + "|";
-	// 	}
-	// 	str += '\n';
-	// }
 	if(i > 0)//up
 	{
 		for(var k = 0; k < 3; k++)
@@ -270,29 +255,19 @@ function heuristic2(backtracking)
 			createChildNodes(node.getChildNodes()[i]);
 		}
 
-		// swap the first layer with the second layer
-		var aux;
-		for( var i = node.getChildNodes().length - 1; i >= 1; i--)
-		{
-			for(var j=0; j < i ; j++)
-			{
-				var firstLayerChildNode = node.getChildNodes()[j];
-				var secondLayerChildNode = node.getChildNodes()[j].getChildNodes()[0];
+		// temporary node list, this node list will be the possible movements of the current node
+		var temporaryNodeList = [];
 
-				if( firstLayerChildNode.getDistance() + secondLayerChildNode.getDistance() > node.getChildNodes()[j+1].getDistance() + node.getChildNodes()[j+1].getChildNodes()[0].getDistance())
-				{
-					aux = node.getChildNodes()[j];
-					node.getChildNodes()[j] = node.getChildNodes()[j+1];
-					node.getChildNodes()[j+1] = aux;
-				}
-			}
-		}
-
-		// remove the current second layer
+		// populating the temporaryNodeList with the possible next movements of the next movements (second layer)
 		for(var i = 0; i < node.getChildNodes().length; ++i)
 		{
-			node.getChildNodes()[i].setChildNodes(null);
+			for(var j = 0; j < node.getChildNodes()[i].getChildNodes().length; j++)
+			{
+				node.getChildNodes()[i].getChildNodes()[j].setParent(node);
+				temporaryNodeList.push(node.getChildNodes()[i].getChildNodes()[j]);
+			}
 		}
+		node.setChildNodes(temporaryNodeList);
 	}
 
 	backtracking = false;
@@ -378,31 +353,30 @@ function heuristicCustom(backtracking)
 		for(var i = 0; i < node.getChildNodes().length; ++i)
 		{
 			createChildNodes(node.getChildNodes()[i]);
-		}
 
-		// swap the first layer with the second layer
-		var aux;
-		for( var i = node.getChildNodes().length - 1; i >= 1; i--)
-		{
-			for(var j=0; j < i ; j++)
+			// In this for, creating a third layer of possible movemets of the second layer
+			for(var j = 0; j < node.getChildNodes()[i].getChildNodes().length; j++)
 			{
-				var firstLayerChildNode = node.getChildNodes()[j];
-				var secondLayerChildNode = node.getChildNodes()[j].getChildNodes()[0];
-
-				if( firstLayerChildNode.getDistance() + secondLayerChildNode.getDistance() > node.getChildNodes()[j+1].getDistance() + node.getChildNodes()[j+1].getChildNodes()[0].getDistance())
-				{
-					aux = node.getChildNodes()[j];
-					node.getChildNodes()[j] = node.getChildNodes()[j+1];
-					node.getChildNodes()[j+1] = aux;
-				}
+				createChildNodes(node.getChildNodes()[i].getChildNodes()[j]);
 			}
 		}
 
-		// remove the current second layer
+		// temporary node list, this node list will be the possible movements of the current node
+		var temporaryNodeList = [];
+
+		// populating the temporaryNodeList with the possible next movements of the next movements of the next movements (third layer)
 		for(var i = 0; i < node.getChildNodes().length; ++i)
 		{
-			node.getChildNodes()[i].setChildNodes(null);
+			for(var j = 0; j < node.getChildNodes()[i].getChildNodes().length; j++)
+			{
+				for( var k = 0; k < node.getChildNodes()[i].getChildNodes()[j].getChildNodes().length; k++ )
+				{
+					node.getChildNodes()[i].getChildNodes()[j].getChildNodes()[k].setParent(node);
+					temporaryNodeList.push(node.getChildNodes()[i].getChildNodes()[j].getChildNodes()[k]);
+				}
+			}
 		}
+		node.setChildNodes(temporaryNodeList);
 	}
 
 	backtracking = false;
@@ -494,5 +468,3 @@ function heuristicCustomProcess(){
 
 	heuristicCustom(false);
 }
-
-
