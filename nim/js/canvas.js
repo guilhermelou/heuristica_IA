@@ -209,10 +209,10 @@ function handleButtons()
 		_moviments = 0;
 		refreshMovimentsLabel();
 	});
-	$("#heuristic-custom-button").click(function()
+	$("#random-button").click(function()
 	{
         // É PRA EU FAZER
-		randomSolution(100000);
+		randomSolution($('#sort-amount').val());
 	});
 	$("#heuristic-1-button").click(function()
 	{
@@ -224,6 +224,13 @@ function handleButtons()
 	$("#heuristic-2-button").click(function()
 	{
 		heuristic2Process();
+        TapesSimulator(chart, _blocks);
+		//drawRegions();
+		refreshMovimentsLabel();
+	});
+	$("#heuristic-custom-button").click(function()
+	{
+		heuristicCustomProcess();
         TapesSimulator(chart, _blocks);
 		//drawRegions();
 		refreshMovimentsLabel();

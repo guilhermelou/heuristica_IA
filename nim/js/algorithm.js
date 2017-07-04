@@ -349,6 +349,116 @@ function heuristic2(backtracking)
 	heuristic2(backtracking);
 }
 
+function heuristicCustom(backtracking)
+{
+	// if no node is in the openList
+	if( openList.length <= 0 ) return;
+
+	// get the last elment of the openList
+	node = openList.pop();
+
+	if( node == null ) return;
+
+	// verify if the current node (position of the blocks) is complete (right positions).
+	if(isComplete(node)) return;
+
+	// doing a movement
+	_moviments++;
+
+	// have to verify if it is not backtracked to not create repetitives nodes (child nodes)
+	if (!backtracking)
+	{
+		// store the current node (movement), used to avoid loops
+		closeList.push(node);
+
+		// create possible movements (child nodes)
+		createChildNodes(node);
+
+		// In this for, creating a second layer of possible movemets of the possible movements (child nodes for each child node)
+		for(var i = 0; i < node.getChildNodes().length; ++i)
+		{
+			createChildNodes(node.getChildNodes()[i]);
+		}
+
+		// swap the first layer with the second layer
+		var aux;
+		for( var i = node.getChildNodes().length - 1; i >= 1; i--)
+		{
+			for(var j=0; j < i ; j++)
+			{
+				var firstLayerChildNode = node.getChildNodes()[j];
+				var secondLayerChildNode = node.getChildNodes()[j].getChildNodes()[0];
+
+				if( firstLayerChildNode.getDistance() + secondLayerChildNode.getDistance() > node.getChildNodes()[j+1].getDistance() + node.getChildNodes()[j+1].getChildNodes()[0].getDistance())
+				{
+					aux = node.getChildNodes()[j];
+					node.getChildNodes()[j] = node.getChildNodes()[j+1];
+					node.getChildNodes()[j+1] = aux;
+				}
+			}
+		}
+
+		// remove the current second layer
+		for(var i = 0; i < node.getChildNodes().length; ++i)
+		{
+			node.getChildNodes()[i].setChildNodes(null);
+		}
+	}
+
+	backtracking = false;
+
+	// we have to verify if the current node has onlu one way (child nodes)
+	var hasOneWay = false;
+
+	// verify if we have a repretition of movement (loop of nodes) for each child node of the current node (possible movements)
+	for(var j = 0; j < node.getChildNodes().length; j++)
+	{
+		var repeated = false;
+		if( !node.getChildNodes()[j].getVisited() )
+		{
+			for(var i = 0; i < closeList.length; i++)
+			{
+				repeated = true;
+				for(var x = 0; x < 3 && repeated; x++)
+				{
+					for(var y = 0; y < 3 && repeated; y++)
+					{
+						if(node.getChildNodes()[j].getBlocks()[x][y] != closeList[i].getBlocks()[x][y])
+						{
+							repeated = false;
+						}
+					}
+				}
+				if(repeated)break;
+			}
+
+			// verified if exist a repretition, if not, advance to the next move (node child).
+			if(!repeated)
+			{
+				hasOneWay = true;
+
+				// advance a movement node (child).
+				openList.push(node.getChildNodes()[j]);
+				break;
+			}
+		}
+	}
+
+	// if not exist child node (movement) possible.
+	if (!hasOneWay)
+	{
+		// set node visited (to not repeat this movement)
+		node.setVisited(true);
+
+		// we have to back to parent (backtracking)
+		openList.push(node.getParent());
+
+		backtracking = true;
+	}
+
+	heuristicCustom(backtracking);
+}
+
 function heuristic1Process()
 {
 	_animationInterval = 1;
@@ -373,3 +483,16 @@ function heuristic2Process()
 
 	heuristic2(false);
 }
+
+function heuristicCustomProcess(){
+	_moviments = 0;
+	openList = null;
+	openList =[];
+	closeList = null;
+	closeList = [];
+	createNode(parent, _blocks);
+
+	heuristicCustom(false);
+}
+
+
